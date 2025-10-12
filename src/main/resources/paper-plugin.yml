@@ -1,0 +1,29 @@
+name: CosmeticsAdder
+version: '${version}'
+author: MrJimin
+
+api-version: "1.21"
+
+main: kr.mrjimin.cosmeticsadder.CosmeticsAdder
+loader: kr.mrjimin.cosmeticsadder.CosmeticsAdderLoader
+
+dependencies:
+  server:
+    CosmeticsCore:
+      load: BEFORE
+      required: false
+    HMCCosmetics:
+      load: BEFORE
+      required: false
+    ItemsAdder:
+      load: BEFORE
+      required: false
+    Nexo:
+      load: BEFORE
+      required: false
+    CraftEngine:
+      load: BEFORE
+      required: false
+    PlaceholderAPI:
+      load: BEFORE
+      required: false
