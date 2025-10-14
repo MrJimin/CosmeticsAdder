@@ -8,7 +8,7 @@ import org.bukkit.entity.Player
 
 class CosmeticsCoreService : Cosmetics.Data {
 
-    override val pluginName = "CosmeticsCore"
+    override val provider = "CosmeticsCore"
 
     override fun isCosmetics(key: String): Boolean = getCosmeticsByKey(key) != null
 
@@ -41,14 +41,10 @@ class CosmeticsCoreService : Cosmetics.Data {
     override fun playerHasCosmetic(player: Player, key: String): Boolean =
         getEquippedCosmetics(player).any { it.key == key }
 
-    // -------------------------
-    // private helper methods
-    // -------------------------
-
     private fun getCosmeticsByCosmeticAccessor(accessor: CosmeticAccessor): Cosmetics? =
         runCatching {
             Cosmetics(
-                pluginName,
+                provider,
                 accessor.key,
                 "cosmeticscore.user.cosmetics.wear.${accessor.key}",
                 accessor.guiModelItem

@@ -1,18 +1,17 @@
-package kr.mrjimin.cosmeticsadder.cosmetics
+package kr.mrjimin.cosmeticsadder.manager
 
+import kr.mrjimin.cosmeticsadder.cosmetics.Cosmetics
 import kr.mrjimin.cosmeticsadder.cosmetics.impl.CosmeticsCoreService
 import kr.mrjimin.cosmeticsadder.cosmetics.impl.HMCCosmeticsService
 import kr.mrjimin.cosmeticsadder.util.PluginUtil
-import kr.mrjimin.cosmeticsadder.util.event
 import org.bukkit.Bukkit
-import org.bukkit.event.player.PlayerJoinEvent
 
-object CosmeticsManager {
+object CosmeticsManager : IManager {
 
     lateinit var cosmeticsData: Cosmetics.Data
         private set
 
-    fun setup() {
+    override fun setup() {
         cosmeticsData = detectAvailablePlugin()
             ?: throw IllegalStateException("No supported cosmetics plugin found.")
 
@@ -27,6 +26,8 @@ object CosmeticsManager {
 //            } ?: it.player.sendMessage("No cosmetics found")
 //        }
     }
+
+    override fun disable() {}
 
     private fun detectAvailablePlugin(): Cosmetics.Data? {
         val plugins = listOf(

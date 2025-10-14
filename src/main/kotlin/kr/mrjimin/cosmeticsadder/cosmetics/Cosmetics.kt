@@ -11,7 +11,7 @@ data class Cosmetics(
 ) {
     interface Data {
 
-        val pluginName: String
+        val provider: String
 
         fun isCosmetics(key: String): Boolean
         fun getCosmetics(): List<Cosmetics>

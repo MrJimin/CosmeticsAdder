@@ -6,15 +6,15 @@ import org.bukkit.entity.Player
 
 class HMCCosmeticsService : Cosmetics.Data {
 
-    override val pluginName = "HMCCosmetics"
+    override val provider = "HMCCosmetics"
 
     override fun isCosmetics(key: String): Boolean = getCosmeticsByKey(key) != null
 
     override fun getCosmetics() =
-        HMCCosmeticsAPI.getAllCosmetics().map { Cosmetics(pluginName, it.id, it.permission, it.item!!) }
+        HMCCosmeticsAPI.getAllCosmetics().map { Cosmetics(provider, it.id, it.permission, it.item!!) }
 
     override fun getCosmeticsByKey(key: String) =
-        HMCCosmeticsAPI.getCosmetic(key)?.let { Cosmetics(pluginName, it.id, it.permission, it.item!!) }
+        HMCCosmeticsAPI.getCosmetic(key)?.let { Cosmetics(provider, it.id, it.permission, it.item!!) }
 
     override fun isInWardrobe(player: Player) =
         HMCCosmeticsAPI.getUser(player.uniqueId)?.isInWardrobe ?: false
@@ -35,7 +35,7 @@ class HMCCosmeticsService : Cosmetics.Data {
         HMCCosmeticsAPI.getUser(player.uniqueId)?.let { user ->
             HMCCosmeticsAPI.getAllCosmeticSlots().values.mapNotNull { slot ->
                 user.getCosmetic(slot)?.id?.let { HMCCosmeticsAPI.getCosmetic(it) }
-                    ?.let { Cosmetics(pluginName, it.id, it.permission, it.item!!) }
+                    ?.let { Cosmetics(provider, it.id, it.permission, it.item!!) }
             }
         } ?: emptyList()
 
