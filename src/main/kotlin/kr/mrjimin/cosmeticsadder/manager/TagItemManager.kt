@@ -12,35 +12,47 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import java.io.File
 
-class TagItemManager(plugin: CosmeticsAdder) : IManager {
+class TagItemManager(private val plugin: CosmeticsAdder) : IManager {
 
     private val file = File(plugin.dataFolder, "tags.yml")
     private val config: YamlConfiguration = YamlConfiguration.loadConfiguration(file.apply {
         if (!exists()) plugin.saveResource("tags.yml", false)
     })
 
-    val tagItems = mutableMapOf<String, TagItemData>()
+    private val tagItems: MutableMap<String, TagItemData> = mutableMapOf()
 
     override fun setup() {
         tagItems.clear()
-        config.getConfigurationSection("tags")?.getKeys(false)?.forEach { key ->
-            val path = config.getConfigurationSection("tags.$key") ?: return@forEach
-
-            tagItems[key] = TagItemData(
-                key,
-                path.getBoolean("enabled", false),
-                path.getString("material") ?: "PAPER",
-                path.getString("display-name")?.toMiniMessage(),
-                path.getStringList("lore").map { it.toMiniMessage() }.toMutableList(),
-                NamespacedKey.fromString(path.getString("item-model") ?: ""),
-                path.getString("tag")!!.toMiniMessage()
-            )
-        }
+        loadFromYaml()
     }
 
     override fun disable() {}
 
-    fun getTagItem(id: String): TagItemData? = tagItems[id]
+    private fun loadFromYaml() {
+        val section = config.getConfigurationSection("tags") ?: return
+
+        for (key in section.getKeys(false)) {
+            val path = section.getConfigurationSection(key) ?: continue
+
+            val data = TagItemData(
+                key = key,
+                enabled = path.getBoolean("enabled", false),
+                material = path.getString("material") ?: "PAPER",
+                displayName = path.getString("display-name")?.toMiniMessage(),
+                lore = path.getStringList("lore").map { it.toMiniMessage() }.toMutableList(),
+                itemModel = path.getString("item-model")?.let { NamespacedKey.fromString(it) },
+                tag = path.getString("tag")?.toMiniMessage() ?: continue
+            )
+
+            tagItems[key] = data
+        }
+    }
+
+    fun getTagItem(id: String): ItemStack? = tagItems[id]?.toItemStack()
+
+    fun getTagData(id: String): TagItemData? = tagItems[id]
+
+    fun getAll(): Map<String, TagItemData> = tagItems
 }
 
 fun TagItemData.toItemStack(): ItemStack {
@@ -56,8 +68,5 @@ fun TagItemData.toItemStack(): ItemStack {
             set(ItemHandler.TAG, PersistentDataType.STRING, tag.toPlain())
         }
     }
-
-    // itemModel?.let { itemStack.setData(DataComponentTypes.ITEM_MODEL, it) }
-
     return itemStack
 }
