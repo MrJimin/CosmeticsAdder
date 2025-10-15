@@ -2,22 +2,23 @@ package kr.mrjimin.cosmeticsadder.cosmetics.impl
 
 import dev.lone.cosmeticscore.api.temporary.CosmeticAccessor
 import dev.lone.cosmeticscore.api.temporary.CosmeticsCoreApi
-import kr.mrjimin.cosmeticsadder.cosmetics.Cosmetics
+import kr.mrjimin.cosmeticsadder.cosmetics.CosmeticsData
+import kr.mrjimin.cosmeticsadder.cosmetics.ICosmetics
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
-object CosmeticsCoreService : Cosmetics.Data {
+object CosmeticsCoreService : ICosmetics {
 
     override val provider = "CosmeticsCore"
 
     override fun isCosmetics(key: String): Boolean = getCosmeticsByKey(key) != null
 
-    override fun getCosmetics(): List<Cosmetics> =
+    override fun getCosmetics(): List<CosmeticsData> =
         getAnyonePlayer()?.let { player ->
             getAllKeys().mapNotNull { getCosmeticsByKey(it, player) }
         } ?: emptyList()
 
-    override fun getCosmeticsByKey(key: String): Cosmetics? =
+    override fun getCosmeticsByKey(key: String): CosmeticsData? =
         getCosmeticsByKey(key, getAnyonePlayer())
 
     override fun isInWardrobe(player: Player): Boolean = CosmeticsCoreApi.isInWardrobe(player)
@@ -30,7 +31,7 @@ object CosmeticsCoreService : Cosmetics.Data {
         getCosmeticsAccessor(key, player).unequip()
     }
 
-    override fun getEquippedCosmetics(player: Player): List<Cosmetics> =
+    override fun getEquippedCosmetics(player: Player): List<CosmeticsData> =
         CosmeticsCoreApi.getEquippedCosmeticsAccessors(player)
             .mapNotNull { it as? CosmeticAccessor }
             .mapNotNull { getCosmeticsByCosmeticAccessor(it) }
@@ -41,9 +42,9 @@ object CosmeticsCoreService : Cosmetics.Data {
     override fun playerHasCosmetic(player: Player, key: String): Boolean =
         getEquippedCosmetics(player).any { it.key == key }
 
-    private fun getCosmeticsByCosmeticAccessor(accessor: CosmeticAccessor): Cosmetics? =
+    private fun getCosmeticsByCosmeticAccessor(accessor: CosmeticAccessor): CosmeticsData? =
         runCatching {
-            Cosmetics(
+            CosmeticsData(
                 provider,
                 accessor.key,
                 "cosmeticscore.user.cosmetics.wear.${accessor.key}",
@@ -51,7 +52,7 @@ object CosmeticsCoreService : Cosmetics.Data {
             )
         }.getOrNull()
 
-    private fun getCosmeticsByKey(key: String, player: Player?): Cosmetics? =
+    private fun getCosmeticsByKey(key: String, player: Player?): CosmeticsData? =
         player?.let { getCosmeticsAccessor(key, it).let(::getCosmeticsByCosmeticAccessor) }
 
     private fun getCosmeticsAccessor(key: String, player: Player): CosmeticAccessor =

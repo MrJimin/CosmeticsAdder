@@ -1,20 +1,21 @@
 package kr.mrjimin.cosmeticsadder.cosmetics.impl
 
 import com.hibiscusmc.hmccosmetics.api.HMCCosmeticsAPI
-import kr.mrjimin.cosmeticsadder.cosmetics.Cosmetics
+import kr.mrjimin.cosmeticsadder.cosmetics.CosmeticsData
+import kr.mrjimin.cosmeticsadder.cosmetics.ICosmetics
 import org.bukkit.entity.Player
 
-object HMCCosmeticsService : Cosmetics.Data {
+object HMCCosmeticsService : ICosmetics {
 
     override val provider = "HMCCosmetics"
 
     override fun isCosmetics(key: String): Boolean = getCosmeticsByKey(key) != null
 
     override fun getCosmetics() =
-        HMCCosmeticsAPI.getAllCosmetics().map { Cosmetics(provider, it.id, it.permission, it.item!!) }
+        HMCCosmeticsAPI.getAllCosmetics().map { CosmeticsData(provider, it.id, it.permission, it.item!!) }
 
     override fun getCosmeticsByKey(key: String) =
-        HMCCosmeticsAPI.getCosmetic(key)?.let { Cosmetics(provider, it.id, it.permission, it.item!!) }
+        HMCCosmeticsAPI.getCosmetic(key)?.let { CosmeticsData(provider, it.id, it.permission, it.item!!) }
 
     override fun isInWardrobe(player: Player) =
         HMCCosmeticsAPI.getUser(player.uniqueId)?.isInWardrobe ?: false
@@ -35,7 +36,7 @@ object HMCCosmeticsService : Cosmetics.Data {
         HMCCosmeticsAPI.getUser(player.uniqueId)?.let { user ->
             HMCCosmeticsAPI.getAllCosmeticSlots().values.mapNotNull { slot ->
                 user.getCosmetic(slot)?.id?.let { HMCCosmeticsAPI.getCosmetic(it) }
-                    ?.let { Cosmetics(provider, it.id, it.permission, it.item!!) }
+                    ?.let { CosmeticsData(provider, it.id, it.permission, it.item!!) }
             }
         } ?: emptyList()
 
