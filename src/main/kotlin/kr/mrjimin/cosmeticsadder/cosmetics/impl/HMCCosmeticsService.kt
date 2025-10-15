@@ -4,7 +4,7 @@ import com.hibiscusmc.hmccosmetics.api.HMCCosmeticsAPI
 import kr.mrjimin.cosmeticsadder.cosmetics.Cosmetics
 import org.bukkit.entity.Player
 
-class HMCCosmeticsService : Cosmetics.Data {
+object HMCCosmeticsService : Cosmetics.Data {
 
     override val provider = "HMCCosmetics"
 

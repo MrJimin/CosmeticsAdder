@@ -15,15 +15,3 @@ dependencies:
     HMCCosmetics:
       load: BEFORE
       required: false
-    ItemsAdder:
-      load: BEFORE
-      required: false
-    Nexo:
-      load: BEFORE
-      required: false
-    CraftEngine:
-      load: BEFORE
-      required: false
-    PlaceholderAPI:
-      load: BEFORE
-      required: false

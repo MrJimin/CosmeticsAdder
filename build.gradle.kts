@@ -18,13 +18,9 @@ repositories {
     }
 
     maven {
-        name = "hmc"
+        name = "hmccosmetics"
         url = uri("https://repo.hibiscusmc.com/releases")
     }
-
-    maven("https://maven.devs.beer/") // ia
-    maven("https://repo.nexomc.com/releases") // nexo
-    maven("https://repo.momirealms.net/releases/") // ce
 }
 
 dependencies {
@@ -35,11 +31,6 @@ dependencies {
     })
 
     compileOnly("com.hibiscusmc:HMCCosmetics:2.8.2-fed13b8e")
-
-    compileOnly("dev.lone:api-itemsadder:4.0.10")
-    compileOnly("com.nexomc:nexo:1.11.0-dev")
-    compileOnly("net.momirealms:craft-engine-core:0.0.63")
-    compileOnly("net.momirealms:craft-engine-bukkit:0.0.63")
 }
 
 kotlin {

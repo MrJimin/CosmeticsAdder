@@ -1,7 +1,6 @@
 package kr.mrjimin.cosmeticsadder
 
 import kr.mrjimin.cosmeticsadder.manager.CosmeticsManager
-import kr.mrjimin.cosmeticsadder.manager.TagItemManager
 import org.bukkit.plugin.java.JavaPlugin
 
 class CosmeticsAdder : JavaPlugin() {
@@ -11,22 +10,12 @@ class CosmeticsAdder : JavaPlugin() {
             private set
     }
 
-    private val managers by lazy {
-        listOf(
-            CosmeticsManager,
-            TagItemManager(this)
-        )
-    }
-
     override fun onLoad() {
         INSTANCE = this
     }
 
     override fun onEnable() {
-        managers.forEach { it.setup() }
+        CosmeticsManager.setup()
     }
 
-    override fun onDisable() {
-        managers.forEach { it.disable() }
-    }
 }

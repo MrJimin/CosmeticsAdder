@@ -6,7 +6,7 @@ import kr.mrjimin.cosmeticsadder.cosmetics.Cosmetics
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
-class CosmeticsCoreService : Cosmetics.Data {
+object CosmeticsCoreService : Cosmetics.Data {
 
     override val provider = "CosmeticsCore"
 
@@ -23,11 +23,11 @@ class CosmeticsCoreService : Cosmetics.Data {
     override fun isInWardrobe(player: Player): Boolean = CosmeticsCoreApi.isInWardrobe(player)
 
     override fun equipCosmetics(key: String, player: Player) {
-        getCosmeticsAccessor(key, player)?.equip()
+        getCosmeticsAccessor(key, player).equip()
     }
 
     override fun unequipCosmetics(key: String, player: Player) {
-        getCosmeticsAccessor(key, player)?.unequip()
+        getCosmeticsAccessor(key, player).unequip()
     }
 
     override fun getEquippedCosmetics(player: Player): List<Cosmetics> =
@@ -52,10 +52,10 @@ class CosmeticsCoreService : Cosmetics.Data {
         }.getOrNull()
 
     private fun getCosmeticsByKey(key: String, player: Player?): Cosmetics? =
-        player?.let { getCosmeticsAccessor(key, it)?.let(::getCosmeticsByCosmeticAccessor) }
+        player?.let { getCosmeticsAccessor(key, it).let(::getCosmeticsByCosmeticAccessor) }
 
-    private fun getCosmeticsAccessor(key: String, player: Player): CosmeticAccessor? =
-        CosmeticsCoreApi.newCosmeticAccessor(key, player) as? CosmeticAccessor
+    private fun getCosmeticsAccessor(key: String, player: Player): CosmeticAccessor =
+        CosmeticsCoreApi.newCosmeticAccessor(key, player) as CosmeticAccessor
 
     private fun getAllKeys(): List<String> =
         @Suppress("UNCHECKED_CAST")
